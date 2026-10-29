@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tiếp sức kho báu – Toán lớp 5</title>
+<style>
+:root{--red:#ff4c56;--blue:#2588ff;--ink:#17305b;--gold:#ffcf48}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:#071a35}
+button{font:inherit;cursor:pointer;border:0}
+.app{min-height:100vh;background:linear-gradient(135deg,#102e5b,#351d65);padding:14px}
+.hero{max-width:1400px;margin:auto;background:#fff;border:5px solid #ffdb61;border-radius:24px;overflow:hidden;box-shadow:0 10px 0 #9b5b21}
+.scene{position:relative;min-height:270px;background-position:center;background-size:cover;display:flex;align-items:flex-end;padding:18px}
+.scene:before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(5,19,45,.85),rgba(5,19,45,.04) 78%)}
+.scene-content{position:relative;color:white;width:100%;text-shadow:0 2px 3px #00152c}
+h1{font-size:clamp(26px,4vw,48px);margin:0 0 5px;font-weight:950;letter-spacing:.3px}
+.subtitle{font-weight:800;font-size:clamp(14px,2vw,20px)}
+.main{max-width:1400px;margin:14px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.panel{background:#fff;border:4px solid white;border-radius:20px;overflow:hidden;box-shadow:0 7px 0 #12274c}
+.panel.red{border-color:#ff6c72}.panel.blue{border-color:#63b1ff}
+.panelhead{padding:12px 16px;color:white;font-weight:950;font-size:22px;display:flex;justify-content:space-between;align-items:center}
+.red .panelhead{background:linear-gradient(100deg,#ef3648,#ff8454)}.blue .panelhead{background:linear-gradient(100deg,#1776ee,#39c5ee)}
+.stats{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;background:#f1f6ff}
+.pill{background:#fff;border:2px solid #dce7fb;border-radius:999px;padding:5px 10px;font-weight:800;font-size:14px}
+.progress{height:9px;background:#dfe7f6;margin:0 14px 12px;border-radius:99px;overflow:hidden}.bar{height:100%;width:0;transition:width .3s}
+.red .bar{background:#ff5261}.blue .bar{background:#2588ff}
+.question{margin:0 14px 12px;padding:10px 12px;border-radius:14px;background:#fff7d7;border:2px solid #ffd45e;text-align:center}
+.question-scene{position:relative;width:100%;aspect-ratio:16/9;min-height:240px;max-height:none;overflow:hidden;border-radius:12px;margin-bottom:10px;background:#071a35;border:3px solid #fff;box-shadow:0 4px 0 #e4c66c}
+.question-scene img{width:100%;height:100%;object-fit:contain;object-position:center;display:block;background:#071a35;image-rendering:auto}
+.scene-caption{display:none}
+.timer-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:4px 0}
+.question-timer{display:inline-flex;align-items:center;justify-content:center;min-width:100px;padding:6px 12px;border-radius:999px;background:#13355f;color:#fff;font-weight:950;font-size:16px;box-shadow:0 3px 0 #071a35}
+.question-timer.warning{background:#d62839;animation:pulse .7s infinite alternate}
+@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.06)}}
+.qnum{font-size:13px;font-weight:900;text-transform:uppercase;color:#8a5a00}.equation{font-size:clamp(25px,3vw,38px);font-weight:950;margin-top:4px;color:#172d55}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 14px 14px}
+.answer{min-height:54px;border-radius:13px;background:#f1f5ff;border:2px solid #d9e5fb;color:#19365f;font-size:clamp(17px,2vw,23px);font-weight:900;box-shadow:0 3px 0 #d0dced}
+.answer:hover{transform:translateY(-1px);filter:brightness(.98)}.answer:disabled{cursor:default;opacity:.8}
+.feedback{min-height:34px;padding:0 14px 12px;font-weight:800;text-align:center}
+.bottom{max-width:1400px;margin:14px auto;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.action{padding:12px 18px;border-radius:14px;font-weight:950;background:#ffcf48;color:#482a00;box-shadow:0 4px 0 #a96d15}
+.action.secondary{background:white;color:#19365f}
+.note{max-width:1400px;margin:10px auto;color:#d9eaff;text-align:center;font-size:13px}
+.modal{position:fixed;inset:0;background:#06142de8;display:flex;align-items:center;justify-content:center;padding:18px;z-index:5}
+.modalbox{width:min(650px,100%);background:#fff;border:5px solid #ffcf48;border-radius:24px;padding:22px;text-align:center}
+.teamselect{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.teamstart{padding:18px 10px;border-radius:16px;color:white;font-size:22px;font-weight:950}.teamstart.redbtn{background:#f04453}.teamstart.bluebtn{background:#2188ff}
+.hidden{display:none!important}
+@media(max-width:760px){.main{grid-template-columns:1fr}.scene{min-height:220px}.question-scene{aspect-ratio:16/9;min-height:210px;max-height:none}.app{padding:8px}.panelhead{font-size:19px}.answers{gap:7px}.answer{min-height:48px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <div class="scene" id="heroScene">
+      <div class="scene-content">
+        <h1>🏆 TIẾP SỨC KHO BÁU TOÁN HỌC</h1>
+        <div class="subtitle">TOÁN LỚP 5 · PHÉP CỘNG SỐ THẬP PHÂN · 2 ĐỘI, 10 CÂU</div>
+      </div>
+    </div>
+  </header>
+  <main class="main">
+    <section class="panel red">
+      <div class="panelhead"><span>🔴 ĐỘI ĐỎ</span><span id="redDone">0/10</span></div>
+      <div class="stats"><span class="pill" id="redScore">⭐ 0 điểm</span><span class="pill" id="redTime">⏱ 00:00</span></div>
+      <div class="progress"><div class="bar" id="redBar"></div></div>
+      <div class="question">
+        <div class="question-scene" id="redScene"><img src="scenes/c1.png" alt="Hình nền 16:9 theo câu hỏi"><div class="scene-caption" id="redSceneCaption">Khởi hành khám phá</div></div>
+        <div class="timer-row"><span class="question-timer" id="redQuestionTimer">⏳ 15 giây</span><span class="qnum" id="redQNum">Sẵn sàng xuất phát!</span></div><div class="equation" id="redEq">Bấm “Bắt đầu”</div>
+      </div>
+      <div class="answers" id="redAnswers"></div><div class="feedback" id="redFeedback">Cùng nhau chinh phục kho báu nhé!</div>
+    </section>
+    <section class="panel blue">
+      <div class="panelhead"><span>🔵 ĐỘI XANH</span><span id="blueDone">0/10</span></div>
+      <div class="stats"><span class="pill" id="blueScore">⭐ 0 điểm</span><span class="pill" id="blueTime">⏱ 00:00</span></div>
+      <div class="progress"><div class="bar" id="blueBar"></div></div>
+      <div class="question">
+        <div class="question-scene" id="blueScene"><img src="scenes/c1.png" alt="Hình nền 16:9 theo câu hỏi"><div class="scene-caption" id="blueSceneCaption">Khởi hành khám phá</div></div>
+        <div class="timer-row"><span class="question-timer" id="blueQuestionTimer">⏳ 15 giây</span><span class="qnum" id="blueQNum">Sẵn sàng xuất phát!</span></div><div class="equation" id="blueEq">Bấm “Bắt đầu”</div>
+      </div>
+      <div class="answers" id="blueAnswers"></div><div class="feedback" id="blueFeedback">Chọn đáp án đúng để đi tiếp!</div>
+    </section>
+  </main>
+  <div class="bottom">
+    <button class="action" id="startBtn">🚀 BẮT ĐẦU</button>
+    <button class="action secondary" id="resetBtn">↻ Chơi lại</button>
+    <button class="action secondary" id="csvBtn">⬇ Tải kết quả CSV</button>
+  </div>
+  <div class="note">Luật chơi: Mỗi đội tự làm 10 câu theo thứ tự. Mỗi câu có 15 giây; trả lời đúng để được 10 điểm và tự động sang câu kế tiếp, trả lời sai thì thử lại, hết giờ sẽ tự chuyển câu. Đội hoàn thành trước sẽ chiến thắng.</div>
+</div>
+<div class="modal" id="startModal">
+  <div class="modalbox">
+    <div style="font-size:52px">🗺️💎🏝️</div>
+    <h1 style="color:#c65a11">SẴN SÀNG SĂN KHO BÁU?</h1>
+    <p>Hai đội cùng chinh phục 10 phép cộng số thập phân. Mỗi câu có 15 giây; mỗi câu đúng được 10 điểm. Hãy tính thật chính xác và phối hợp thật nhanh!</p>
+    <div class="teamselect">
+      <button class="teamstart redbtn" id="modalStart">🔴 BẮT ĐẦU THI</button>
+      <button class="teamstart bluebtn" id="modalClose">Xem hướng dẫn</button>
+    </div>
+    <p style="font-size:13px;color:#64748b">Dùng chung một máy tính; hai đội lần lượt chọn đáp án trên màn hình. Đồng hồ tính riêng cho từng đội.</p>
+  </div>
+</div>
+<div class="modal hidden" id="endModal"><div class="modalbox"><div style="font-size:56px">🏆✨🎉</div><h1 id="winnerTitle" style="color:#c65a11">KHO BÁU ĐÃ ĐƯỢC TÌM THẤY!</h1><p id="winnerText"></p><button class="action" id="endClose">Đóng</button></div></div>
+<script>
+const qs = [
+ {q:"5,4 + 3,2",a:8.6,opts:["8,6","8,7","8,5","7,6"],name:"Khởi hành",scene:1},
+ {q:"15,3 + 2,7",a:18.0,opts:["17,0","17,3","18,0","18,3"],name:"Đảo san hô",scene:2},
+ {q:"28,6 + 5,47",a:34.07,opts:["32,07","33,07","34,07","33,17"],name:"Vượt thác vàng",scene:3},
+ {q:"8,25 + 1,4",a:9.65,opts:["9,55","9,65","9,75","9,56"],name:"Cập bến làng chài",scene:4},
+ {q:"6,48 + 2,37",a:8.85,opts:["8,75","8,85","8,76","8,95"],name:"Vượt biển xanh",scene:5},
+ {q:"12,34 + 5,21",a:17.55,opts:["17,55","17,45","17,54","18,55"],name:"Hòn đảo bí mật",scene:6},
+ {q:"7,324 + 1,552",a:8.876,opts:["8,866","8,876","8,867","8,875"],name:"Khám phá đảo ngọc",scene:7},
+ {q:"8,75 + 4,38",a:13.13,opts:["12,03","13,03","12,13","13,13"],name:"Kho báu đại dương",scene:8},
+ {q:"26,48 + 17,35",a:43.83,opts:["43,72","43,73","43,82","43,83"],name:"Đảo ngọc kho báu",scene:9},
+ {q:"47,28 + 6,54",a:53.82,opts:["53,72","53,73","53,82","53,83"],name:"Chinh phục kho báu",scene:10}
+];
+const QUESTION_SECONDS = 15;
+const teams = {
+ red:{index:0,score:0,seconds:0,questionRemaining:QUESTION_SECONDS,started:false,done:false,records:[]},
+ blue:{index:0,score:0,seconds:0,questionRemaining:QUESTION_SECONDS,started:false,done:false,records:[]}
+};
+let running=false, interval=null, ended=false;
+const $=id=>document.getElementById(id);
+function fmt(sec){return String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0")}
+function setScene(i){$("heroScene").style.backgroundImage=`url("scenes/c${Math.max(1,Math.min(i,10))}.png")`}
+function renderQuestionTimer(k){
+ const t=teams[k], el=$(k+"QuestionTimer");
+ if(!el)return;
+ el.textContent=t.done?"🏁 Hoàn thành":(!t.started?"⏳ 15 giây":`⏳ ${t.questionRemaining} giây`);
+ el.classList.toggle("warning",t.started&&!t.done&&t.questionRemaining<=5);
+}
+function renderTeam(k){
+ const t=teams[k], cap=k==="red"?"red":"blue";
+ $(cap+"Done").textContent=`${t.index}/10`;
+ $(cap+"Score").textContent=`⭐ ${t.score} điểm`;
+ $(cap+"Time").textContent="⏱ "+fmt(t.seconds);
+ $(cap+"Bar").style.width=(t.index/10*100)+"%";
+ renderQuestionTimer(k);
+ if(t.done){
+   $(cap+"QNum").textContent="🎉 ĐÃ VỀ ĐÍCH!";
+   $(cap+"Eq").textContent="Hoàn thành 10/10";
+   $(cap+"Scene").querySelector("img").src="scenes/c10.png";
+   $(cap+"SceneCaption").textContent="Kho báu chiến thắng";
+   $(cap+"Answers").innerHTML="";
+   $(cap+"Feedback").textContent="Xuất sắc! Đội đã tìm thấy kho báu.";
+   return;
+ }
+ if(!t.started){
+   $(cap+"QNum").textContent="Sẵn sàng xuất phát!";
+   $(cap+"Eq").textContent="Chờ hiệu lệnh bắt đầu";
+   $(cap+"Answers").innerHTML="";
+   return;
+ }
+ const q=qs[Math.min(t.index,qs.length-1)];
+ $(cap+"QNum").textContent=`CÂU ${t.index+1}/10 · ${q.name}`;
+ $(cap+"Eq").textContent=q.q+" = ?";
+ const sceneImg=$(cap+"Scene").querySelector("img");
+ sceneImg.src=`scenes/c${q.scene}.png`;
+ sceneImg.alt=`Minh họa câu ${t.index+1}: ${q.name}`;
+ $(cap+"SceneCaption").textContent=q.name;
+ const shuffled=[...q.opts].sort(()=>Math.random()-.5);
+ $(cap+"Answers").innerHTML=shuffled.map(v=>`<button class="answer" data-val="${v.replace(/"/g,"&quot;")}">${v}</button>`).join("");
+ $(cap+"Answers").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>choose(k,b.dataset.val)));
+}
+function numeric(s){return Number(String(s).replace(/,/g,".").replace(/[^\d.-]/g,""))}
+function nextQuestion(k, reason){
+ const t=teams[k];
+ t.index++;
+ t.questionRemaining=QUESTION_SECONDS;
+ if(reason==="timeout") $(k+"Feedback").textContent="⏰ Hết 15 giây! Chuyển sang câu tiếp theo.";
+ if(t.index>=qs.length){t.done=true;renderTeam(k);finish(k);return;}
+ renderTeam(k);
+ if(reason==="correct") $(k+"Feedback").textContent="✅ Chính xác! Đã mở chặng tiếp theo.";
+}
+function choose(k,v){
+ const t=teams[k]; if(!running||!t.started||t.done||ended)return;
+ const q=qs[t.index], correct=Math.abs(numeric(v)-q.a)<0.000001;
+ if(correct){
+   t.score+=10;
+   t.records.push({team:k==="red"?"Đội đỏ":"Đội xanh",question:t.index+1,expression:q.q,answer:v,result:"Đúng"});
+   nextQuestion(k,"correct");
+ }else{
+   t.records.push({team:k==="red"?"Đội đỏ":"Đội xanh",question:t.index+1,expression:q.q,answer:v,result:"Chưa đúng"});
+   $(k+"Feedback").textContent="🔁 Chưa chính xác. Đội hãy tính lại nhé!";
+ }
+}
+function finish(k){
+ if(teams.red.done && teams.blue.done){
+   ended=true;running=false;clearInterval(interval);
+   $("winnerTitle").textContent="🏆 HOÀN THÀNH THỬ THÁCH!";
+   $("winnerText").textContent=`Hai đội đã hoàn thành 10 câu. Đội Đỏ: ${teams.red.score} điểm; Đội Xanh: ${teams.blue.score} điểm.`;
+   $("endModal").classList.remove("hidden");
+   return;
+ }
+ // Keep the other team playing; winner is the first team to complete all questions.
+ if(teams[k].done){
+   ended=true;running=false;clearInterval(interval);
+   const label=k==="red"?"ĐỘI ĐỎ":"ĐỘI XANH";
+   $("winnerTitle").textContent="🏆 "+label+" CHIẾN THẮNG!";
+   $("winnerText").textContent=`${label} hoàn thành 10 câu trước với ${teams[k].score} điểm trong ${fmt(teams[k].seconds)}. Hãy tải CSV để lưu kết quả.`;
+   $("endModal").classList.remove("hidden");
+ }
+}
+function start(){
+ if(running)return;
+ $("startModal").classList.add("hidden"); running=true; ended=false;
+ Object.values(teams).forEach(t=>{t.started=true;t.questionRemaining=QUESTION_SECONDS});
+ setScene(1); renderTeam("red");renderTeam("blue");
+ interval=setInterval(()=>{
+   if(!running)return;
+   Object.keys(teams).forEach(k=>{
+     const t=teams[k];
+     if(t.started&&!t.done){
+       t.seconds++;
+       t.questionRemaining--;
+       if(t.questionRemaining<=0){
+         t.records.push({team:k==="red"?"Đội đỏ":"Đội xanh",question:t.index+1,expression:qs[t.index].q,answer:"",result:"Hết giờ"});
+         nextQuestion(k,"timeout");
+       }else{
+         renderQuestionTimer(k);
+       }
+     }
+     renderTeamStats(k);
+   });
+ },1000);
+}
+function renderTeamStats(k){
+ const cap=k==="red"?"red":"blue";
+ $(cap+"Time").textContent="⏱ "+fmt(teams[k].seconds);
+ renderQuestionTimer(k);
+}
+function reset(){
+ clearInterval(interval);running=false;ended=false;
+ Object.keys(teams).forEach(k=>{teams[k]={index:0,score:0,seconds:0,questionRemaining:QUESTION_SECONDS,started:false,done:false,records:[]}});
+ $("endModal").classList.add("hidden");$("startModal").classList.remove("hidden");
+ setScene(1);renderTeam("red");renderTeam("blue");
+ $("redFeedback").textContent="Cùng nhau chinh phục kho báu nhé!";
+ $("blueFeedback").textContent="Chọn đáp án đúng để đi tiếp!";
+}
+function csv(){
+ const rows=[["Đội","Câu","Phép tính","Đáp án đã chọn","Kết quả"]];
+ Object.values(teams).forEach(t=>t.records.forEach(r=>rows.push([r.team,r.question,r.expression,r.answer,r.result])));
+ rows.push(["Đội đỏ","Tổng điểm","","",teams.red.score],["Đội xanh","Tổng điểm","","",teams.blue.score]);
+ const content="\ufeff"+rows.map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(",")).join("\r\n");
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([content],{type:"text/csv;charset=utf-8;"}));a.download="ket-qua-tiep-suc-toan-5.csv";a.click();URL.revokeObjectURL(a.href);
+}
+$("startBtn").addEventListener("click",start);
+$("modalStart").addEventListener("click",start);
+$("modalClose").addEventListener("click",()=>{$("startModal").classList.add("hidden");alert("Mỗi đội có 10 câu riêng, mỗi câu 15 giây. Chọn đúng nhận 10 điểm và tự động sang câu tiếp theo; chọn sai thì thử lại; hết giờ sẽ tự chuyển câu. Đội hoàn thành trước là đội chiến thắng.");$("startModal").classList.remove("hidden")});
+$("resetBtn").addEventListener("click",reset);
+$("csvBtn").addEventListener("click",csv);
+$("endClose").addEventListener("click",()=>$("endModal").classList.add("hidden"));
+setScene(0);renderTeam("red");renderTeam("blue");
+</script>
+</body>
+</html>
